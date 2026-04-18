@@ -19,7 +19,7 @@ void print_ar(int* ar, int len) {
   }
 }
 
-void parse_args(int argc, char** argv, int* ar_out, int* len_out){
+void parse_args(int argc, const char** argv, int** ar_out, int* len_out){
   /**
  * Transform the command line arguments from their string representations to their numeric values
  * @param argc: the number of the command line arguments
@@ -30,10 +30,12 @@ void parse_args(int argc, char** argv, int* ar_out, int* len_out){
  * @param len_out:  An output parameter. The number of elements placed into ar_out.
  */
 
-  *len_out = argc - 1;
-  ar_out = (int*)malloc(*len_out);
-  for(int i = 0; i < *len_out; ++i){
-    sscanf(argv[i], "%d", ar_out[i]);
+  *len_out = argc - 1; //argv[0] is the executable
+  *ar_out = (int*)malloc((*len_out) * sizeof(int));
+  if (argc == 1) {
+    *ar_out = nullptr;
   }
-
+  for(int i = 0; i < *len_out; ++i){
+    sscanf(argv[i+1], "%d", &(*ar_out)[i]);
+  }
 }
